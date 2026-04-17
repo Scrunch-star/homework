@@ -1,0 +1,274 @@
+{
+  "method": "clip_threshold_search",
+  "split": "validation",
+  "max_samples": 50,
+  "search_values": [
+    0.01,
+    0.03,
+    0.05,
+    0.07,
+    0.1
+  ],
+  "best": {
+    "threshold_high": 0.01,
+    "threshold_low": 0.01,
+    "accuracy": 0.3,
+    "distribution": {
+      "entailment": 3,
+      "neutral": 0,
+      "contradiction": 47
+    }
+  },
+  "trials": [
+    {
+      "threshold_high": 0.01,
+      "threshold_low": 0.01,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.01,
+      "threshold_low": 0.03,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.01,
+      "threshold_low": 0.05,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.01,
+      "threshold_low": 0.07,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.01,
+      "threshold_low": 0.1,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.03,
+      "threshold_low": 0.01,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.03,
+      "threshold_low": 0.03,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.03,
+      "threshold_low": 0.05,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.03,
+      "threshold_low": 0.07,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.03,
+      "threshold_low": 0.1,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.05,
+      "threshold_low": 0.01,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.05,
+      "threshold_low": 0.03,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.05,
+      "threshold_low": 0.05,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.05,
+      "threshold_low": 0.07,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.05,
+      "threshold_low": 0.1,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.07,
+      "threshold_low": 0.01,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.07,
+      "threshold_low": 0.03,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.07,
+      "threshold_low": 0.05,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.07,
+      "threshold_low": 0.07,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.07,
+      "threshold_low": 0.1,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.1,
+      "threshold_low": 0.01,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.1,
+      "threshold_low": 0.03,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.1,
+      "threshold_low": 0.05,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.1,
+      "threshold_low": 0.07,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    },
+    {
+      "threshold_high": 0.1,
+      "threshold_low": 0.1,
+      "accuracy": 0.3,
+      "distribution": {
+        "entailment": 3,
+        "neutral": 0,
+        "contradiction": 47
+      }
+    }
+  ]
+}

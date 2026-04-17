@@ -1,0 +1,103 @@
+{
+  "method": "llava",
+  "split": "validation",
+  "accuracy": 0.4166666666666667,
+  "results": [
+    {
+      "image_id": "2248275918",
+      "premise": "A toddler poses in front of a computer at a business office.",
+      "hypothesis": "A toddler sleeps outside.",
+      "gold_label": "contradiction",
+      "pred_label": "entailment",
+      "raw_response": "A"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A toddler poses in front of a computer at a business office.",
+      "hypothesis": "A toddler poses at the office.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "raw_response": "A"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A toddler poses in front of a computer at a business office.",
+      "hypothesis": "A toddler poses in front of a computer indoors.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "raw_response": "A"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "An infant is sitting in front of a computer.",
+      "hypothesis": "The baby is in front of the computer.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "raw_response": "A"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "An infant is sitting in front of a computer.",
+      "hypothesis": "The baby loves the computer.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "raw_response": "A"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "An infant is sitting in front of a computer.",
+      "hypothesis": "The computer smells like diapers.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "raw_response": "A"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A little asian girl is sitting at a computer desk about to grab the mouse.",
+      "hypothesis": "The little asian girl at the computer is about to play a game.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "raw_response": "A"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A little asian girl is sitting at a computer desk about to grab the mouse.",
+      "hypothesis": "The little hispanic girl sits in front of the computer desk.",
+      "gold_label": "contradiction",
+      "pred_label": "entailment",
+      "raw_response": "A"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A little asian girl is sitting at a computer desk about to grab the mouse.",
+      "hypothesis": "The asian girl sits at the computer desk.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "raw_response": "A"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "Young girl with her hair up playing with her parents computer.",
+      "hypothesis": "A person is learning a new program on the computer with her parents.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "raw_response": "A"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "Young girl with her hair up playing with her parents computer.",
+      "hypothesis": "An old man works on MTurk.",
+      "gold_label": "contradiction",
+      "pred_label": "contradiction",
+      "raw_response": "C"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "Young girl with her hair up playing with her parents computer.",
+      "hypothesis": "A person is playing on the computer.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "raw_response": "A"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "method": "cot_llava",
+  "split": "validation",
+  "accuracy": 0.3,
+  "results": [
+    {
+      "image_id": "2248275918",
+      "hypothesis": "A toddler sleeps outside.",
+      "gold_label": "contradiction",
+      "pred_label": "entailment",
+      "cot": {}
+    },
+    {
+      "image_id": "2248275918",
+      "hypothesis": "A toddler poses at the office.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "cot": {}
+    },
+    {
+      "image_id": "2248275918",
+      "hypothesis": "A toddler poses in front of a computer indoors.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "cot": {}
+    },
+    {
+      "image_id": "2248275918",
+      "hypothesis": "The baby is in front of the computer.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "cot": {}
+    },
+    {
+      "image_id": "2248275918",
+      "hypothesis": "The baby loves the computer.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "cot": {}
+    },
+    {
+      "image_id": "2248275918",
+      "hypothesis": "The computer smells like diapers.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "cot": {}
+    },
+    {
+      "image_id": "2248275918",
+      "hypothesis": "The little asian girl at the computer is about to play a game.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "cot": {}
+    },
+    {
+      "image_id": "2248275918",
+      "hypothesis": "The little hispanic girl sits in front of the computer desk.",
+      "gold_label": "contradiction",
+      "pred_label": "entailment",
+      "cot": {}
+    },
+    {
+      "image_id": "2248275918",
+      "hypothesis": "The asian girl sits at the computer desk.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "cot": {}
+    },
+    {
+      "image_id": "2248275918",
+      "hypothesis": "A person is learning a new program on the computer with her parents.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "cot": {}
+    }
+  ]
+}

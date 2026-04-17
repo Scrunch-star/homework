@@ -1,0 +1,187 @@
+{
+  "method": "cot_llava",
+  "split": "validation",
+  "accuracy": 0.35,
+  "results": [
+    {
+      "image_id": "2248275918",
+      "premise": "A toddler poses in front of a computer at a business office.",
+      "hypothesis": "A toddler sleeps outside.",
+      "gold_label": "contradiction",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"monitor\", \"keyboard\", \"mouse\", \"book\", \"office\", \"toddler\"],\n\"statement\\_entities\": [\"A toddler poses in front of a computer at a business office\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The image shows a toddler sitting in front of a computer, which is not the same as sleeping outside. The premise and hypothesis are in conflict.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A toddler poses in front of a computer at a business office.",
+      "hypothesis": "A toddler poses at the office.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"monitor\", \"keyboard\", \"mouse\", \"book\", \"office\", \"toddler\"],\n\"statement\\_entities\": [\"A toddler poses in front of a computer at a business office.\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The image shows a toddler sitting in front of a computer, but the statement does not include any details about the office environment. The statement only provides information about the toddler posing in front of the computer. Therefore, the hypothesis is neutral, as it does not directly conflict with the image or premise.\",\n\"label\": \"B\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A toddler poses in front of a computer at a business office.",
+      "hypothesis": "A toddler poses in front of a computer indoors.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"monitor\", \"keyboard\", \"mouse\", \"office\", \"business\", \"toddler\"],\n\"statement\\_entities\": [\"...\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The premise and hypothesis are in conflict, as the premise states the toddler is in a business office, while the hypothesis does not provide any information about the location. The image only shows the toddler in front of a computer, so the hypothesis is neutral.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "An infant is sitting in front of a computer.",
+      "hypothesis": "The baby is in front of the computer.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"infant\", \"computer\", \"keyboard\", \"mouse\", \"book\", \"cup\"],\n\"statement\\_entities\": [\"An infant is sitting in front of a computer\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The image shows a baby sitting in front of a computer, but the statement does not provide any information about the baby's actions or intentions. It only states that the baby is in front of the computer. Therefore, the hypothesis is neutral, as it does not entail or contradict the image or premise.\",\n\"label\": \"B\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "An infant is sitting in front of a computer.",
+      "hypothesis": "The baby loves the computer.",
+      "gold_label": "neutral",
+      "pred_label": "contradiction",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"infant\", \"computer\", \"keyboard\", \"mouse\", \"book\", \"monitor\"],\n\"statement\\_entities\": [\"infant\", \"loves\", \"computer\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The hypothesis states that the baby loves the computer, but there is no clear evidence in the image to support this claim. The image only shows the infant sitting in front of the computer, but it does not provide any information about the baby's emotions or preferences.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "An infant is sitting in front of a computer.",
+      "hypothesis": "The computer smells like diapers.",
+      "gold_label": "neutral",
+      "pred_label": "contradiction",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"infant\", \"computer\", \"keyboard\", \"mouse\", \"books\", \"monitor\"],\n\"statement\\_entities\": [\"infant\", \"computer\", \"keyboard\", \"mouse\", \"books\", \"monitor\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The hypothesis suggests that the computer smells like diapers, but there is no clear indication of that in the image. The image only shows the infant sitting in front of the computer, keyboard, and mouse. The books and monitor are also present in the scene, but they do not provide any information about the smell of the computer.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A little asian girl is sitting at a computer desk about to grab the mouse.",
+      "hypothesis": "The little asian girl at the computer is about to play a game.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"monitor\", \"keyboard\", \"mouse\", \"book\", \"little girl\", \"desk\"],\n\"statement\\_entities\": [\"little asian girl\", \"play game\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The image shows a little girl sitting at a computer desk, but the statement suggests that she is about to play a game. However, there is no evidence in the image that she is about to play a game. Instead, she is sitting in front of a computer with a keyboard and mouse, and there is a book on the desk. Therefore, the hypothesis is contradicted by the image.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A little asian girl is sitting at a computer desk about to grab the mouse.",
+      "hypothesis": "The little hispanic girl sits in front of the computer desk.",
+      "gold_label": "contradiction",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"little asian girl\", \"computer desk\", \"mouse\", \"book\", \"can\", \"keyboard\", \"monitor\"],\n\"statement\\_entities\": [\"little hispanic girl\", \"sits\", \"in front of\", \"computer desk\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The premise and hypothesis contradict each other. The premise states that a little asian girl is sitting at a computer desk about to grab the mouse, while the hypothesis states that a little hispanic girl sits in front of the computer desk. The image shows a little asian girl sitting at a computer desk, but the hypothesis does not match the image.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A little asian girl is sitting at a computer desk about to grab the mouse.",
+      "hypothesis": "The asian girl sits at the computer desk.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"little asian girl\", \"computer desk\", \"mouse\", \"book\", \"can\", \"keyboard\", \"monitor\"],\n\"statement\\_entities\": [\"A little asian girl is sitting at a computer desk about to grab the mouse.\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The image shows a little asian girl sitting at a computer desk, but the statement adds that she is about to grab the mouse. This detail is not clearly visible in the image and adds unsupported information, so the hypothesis is neutral (B).\",\n\"label\": \"B\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "Young girl with her hair up playing with her parents computer.",
+      "hypothesis": "A person is learning a new program on the computer with her parents.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"monitor\", \"keyboard\", \"mouse\", \"book\", \"can\", \"child\"],\n\"statement\\_entities\": [\"Young girl with her hair up playing with her parents computer\", \"A person is learning a new program on the computer with her parents\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The image shows a young girl playing with a computer, but the statement suggests that she is learning a new program with her parents. This contradicts the image, as it does not show any interaction between the child and her parents. Hence, the hypothesis is contradicted.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "Young girl with her hair up playing with her parents computer.",
+      "hypothesis": "An old man works on MTurk.",
+      "gold_label": "contradiction",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"monitor\", \"keyboard\", \"mouse\", \"book\", \"can\", \"child\"],\n\"statement\\_entities\": [\"Young girl with her hair up playing with her parents computer\", \"An old man works on MTurk\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The image shows a young girl playing with a computer, while the statement suggests an old man working on MTurk. The two scenarios are contradictory, so the label is 'C' (Contradiction).\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "Young girl with her hair up playing with her parents computer.",
+      "hypothesis": "A person is playing on the computer.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"monitor\", \"keyboard\", \"mouse\", \"book\", \"can\", \"child\"],\n\"statement\\_entities\": [\"Young girl with her hair up playing with her parents computer.\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The image shows a young girl playing with a computer, but the statement adds the detail of her hair being up. This detail is not visible in the image and contradicts the premise.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A small child sits in front of a computer.",
+      "hypothesis": "A man sits in front of a television.",
+      "gold_label": "contradiction",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"monitor\", \"keyboard\", \"mouse\", \"book\", \"child\"],\n\"statement\\_entities\": [\"man\", \"television\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The premise and hypothesis are contradictory, as the premise states a small child is sitting in front of a computer, while the hypothesis states a man is sitting in front of a television. The image shows a child sitting in front of a computer, which is not the same as a man sitting in front of a television.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A small child sits in front of a computer.",
+      "hypothesis": "A child sits by a computer.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"monitor\", \"keyboard\", \"mouse\", \"book\", \"child\"],\n\"statement\\_entities\": [\"A small child sits in front of a computer\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The image shows a child sitting in front of a computer, but the statement does not provide any information about the child's age. It could be a small child, but it could also be an adult. The statement does not provide enough information to determine if it entails the image.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A small child sits in front of a computer.",
+      "hypothesis": "A small child sits in front of a laptop computer.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"laptop\", \"child\", \"keyboard\", \"mouse\", \"monitor\", \"books\"],\n\"statement\\_entities\": [\"laptop\", \"child\", \"keyboard\", \"mouse\", \"monitor\", \"books\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The premise and hypothesis both describe a small child sitting in front of a computer. However, the premise specifically states 'a small child sits in front of a computer,' while the hypothesis states 'a small child sits in front of a laptop computer.' The presence of a laptop in the image contradicts the hypothesis, making it a contradiction.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "402978771",
+      "premise": "A woman sits on a bench next to a pay phone and faces train tracks and a large building.",
+      "hypothesis": "The woman is sitting outside.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"bench\", \"pay phone\", \"woman\", \"train tracks\", \"large building\"],\n\"statement\\_entities\": [\"A woman sits on a bench next to a pay phone and faces train tracks and a large building\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The premise states that the woman is sitting outside, but the image does not provide enough information to confirm this. The hypothesis is neutral.\",\n\"label\": \"B\"\n}"
+    },
+    {
+      "image_id": "402978771",
+      "premise": "A woman sits on a bench next to a pay phone and faces train tracks and a large building.",
+      "hypothesis": "The car driver is taking a right turn.",
+      "gold_label": "contradiction",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"bench\", \"pay phone\", \"train tracks\", \"large building\", \"woman\", \"car driver\"],\n\"statement\\_entities\": [\"A woman sits on a bench next to a pay phone and faces train tracks and a large building.\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The premise and hypothesis are in conflict, as the premise describes a woman sitting on a bench, while the hypothesis describes a car driver taking a right turn. The image does not provide enough information to determine which scenario is more accurate.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "402978771",
+      "premise": "A woman sits on a bench next to a pay phone and faces train tracks and a large building.",
+      "hypothesis": "A woman is waiting for her train to arrive.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"bench\", \"pay phone\", \"train tracks\", \"large building\", \"woman\"],\n\"statement\\_entities\": [\"A woman sits on a bench next to a pay phone and faces train tracks and a large building.\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The image shows a woman sitting on a bench next to a pay phone, but it does not provide information about her waiting for a train. The statement does not provide enough information to determine if the hypothesis is supported or not.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "402978771",
+      "premise": "A woman waiting at a train stop next to a pay phone.",
+      "hypothesis": "A woman has missed her train and waits for the next one.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"woman\", \"train stop\", \"pay phone\", \"bench\"],\n\"statement\\_entities\": [\"A woman waiting at a train stop next to a pay phone\", \"A woman has missed her train and waits for the next one\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The image shows a woman sitting on a bench next to a pay phone, but the statement suggests that she has missed her train and is waiting for the next one. This contradicts the image's content, as it does not show her waiting for a train. Hence, the hypothesis is contradicted.\",\n\"label\": \"C\"\n}"
+    },
+    {
+      "image_id": "402978771",
+      "premise": "A woman waiting at a train stop next to a pay phone.",
+      "hypothesis": "A woman is next to a phone.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "cot": {},
+      "raw_response": "{\n\"image\\_entities\": [\"woman\", \"phone\", \"train stop\"],\n\"statement\\_entities\": [\"A woman waiting at a train stop next to a pay phone.\"],\n\"conflict\\_detected\": true,\n\"reasoning\": \"The image shows a woman sitting next to a phone, but the statement does not include any information about her waiting at a train stop. The premise and hypothesis are not in sync.\",\n\"label\": \"C\"\n}"
+    }
+  ]
+}
