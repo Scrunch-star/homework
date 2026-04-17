@@ -1,10 +1,7 @@
 """
 BLIP-2 / LLaVA VQA 风格评估。
 
-策略：构造 prompt 让模型直接回答 A/B/C 三选一：
-  A = entailment
-  B = neutral
-  C = contradiction
+策略：构造 prompt 让模型直接回答三分类标签，支持 baseline / tuned 两种固定模式。
 """
 import argparse
 import json
@@ -18,10 +15,21 @@ from PIL import Image
 from tqdm import tqdm
 
 from src.data.dataset import SNLIVEDataset
-from src.utils.config import PRED_DIR, PROJECT_ROOT
+from src.utils.config import LABELS, PRED_DIR, PROJECT_ROOT
 
 # ==================== Prompt 模板 ====================
-PROMPT_TEMPLATE = (
+BASELINE_PROMPT_TEMPLATE = (
+    "You are solving a 3-way visual entailment task.\n\n"
+    'Premise: "{premise}"\n'
+    'Hypothesis: "{hypothesis}"\n\n'
+    "Choose one label for the hypothesis relative to the image.\n"
+    "A) entailment\n"
+    "B) neutral\n"
+    "C) contradiction\n\n"
+    "Answer with only one label word or one letter."
+)
+
+TUNED_PROMPT_TEMPLATE = (
     "You are solving a 3-way visual entailment task.\n\n"
     "Label definitions:\n"
     "- entailment: the image and premise clearly support the hypothesis.\n"
@@ -43,6 +51,17 @@ PROMPT_TEMPLATE = (
     "Return exactly one word: entailment, neutral, or contradiction."
 )
 
+PROMPT_VARIANTS = {
+    "baseline": {
+        "template": BASELINE_PROMPT_TEMPLATE,
+        "version": "baseline_v1",
+    },
+    "tuned": {
+        "template": TUNED_PROMPT_TEMPLATE,
+        "version": "tuned_v1",
+    },
+}
+
 # 答案到标签的映射
 ANSWER2LABEL = {"A": "entailment", "B": "neutral", "C": "contradiction"}
 WORD2LABEL = {
@@ -52,16 +71,26 @@ WORD2LABEL = {
 }
 
 
-def parse_response(response: str) -> str:
-    """从模型生成文本中提取标签，失败时回退到 neutral。"""
+def parse_response(response: str) -> dict:
+    """从模型生成文本中提取标签，并返回解析元数据。"""
     cleaned = response.strip()
     if not cleaned:
-        return "neutral"
+        return {
+            "label": "neutral",
+            "parse_source": "empty_response",
+            "fallback_used": True,
+            "response_empty": True,
+        }
 
     first_line = cleaned.splitlines()[0].strip().upper()
     word_match = re.search(r"\b(ENTAILMENT|NEUTRAL|CONTRADICTION)\b", first_line)
     if word_match:
-        return WORD2LABEL[word_match.group(1)]
+        return {
+            "label": WORD2LABEL[word_match.group(1)],
+            "parse_source": "first_line_word",
+            "fallback_used": False,
+            "response_empty": False,
+        }
 
     patterns = [
         r"^(?:ANSWER\s*[:：-]?\s*)?\(?([ABC])\)?\b",
@@ -70,17 +99,73 @@ def parse_response(response: str) -> str:
     for pattern in patterns:
         match = re.search(pattern, first_line)
         if match:
-            return ANSWER2LABEL[match.group(1)]
+            return {
+                "label": ANSWER2LABEL[match.group(1)],
+                "parse_source": "first_line_letter",
+                "fallback_used": False,
+                "response_empty": False,
+            }
 
     fallback_word_match = re.search(r"\b(ENTAILMENT|NEUTRAL|CONTRADICTION)\b", cleaned.upper())
     if fallback_word_match:
-        return WORD2LABEL[fallback_word_match.group(1)]
+        return {
+            "label": WORD2LABEL[fallback_word_match.group(1)],
+            "parse_source": "full_text_word",
+            "fallback_used": True,
+            "response_empty": False,
+        }
 
     fallback_match = re.search(r"\b([ABC])\b", cleaned.upper())
     if fallback_match:
-        return ANSWER2LABEL[fallback_match.group(1)]
+        return {
+            "label": ANSWER2LABEL[fallback_match.group(1)],
+            "parse_source": "full_text_letter",
+            "fallback_used": True,
+            "response_empty": False,
+        }
 
-    return "neutral"
+    return {
+        "label": "neutral",
+        "parse_source": "default_neutral",
+        "fallback_used": True,
+        "response_empty": False,
+    }
+
+
+def compute_prediction_distribution(results: list[dict]) -> dict[str, int]:
+    distribution = {label: 0 for label in LABELS}
+    for record in results:
+        distribution[record["pred_label"]] = distribution.get(record["pred_label"], 0) + 1
+    return distribution
+
+
+def compute_parse_stats(results: list[dict]) -> dict:
+    parse_source_distribution: dict[str, int] = {}
+    fallback_count = 0
+    empty_response_count = 0
+
+    for record in results:
+        source = record.get("parse_source", "unknown")
+        parse_source_distribution[source] = parse_source_distribution.get(source, 0) + 1
+        if record.get("fallback_used"):
+            fallback_count += 1
+        if record.get("response_empty"):
+            empty_response_count += 1
+
+    total = len(results)
+    return {
+        "fallback_count": fallback_count,
+        "fallback_rate": fallback_count / total if total else 0.0,
+        "empty_response_count": empty_response_count,
+        "parse_source_distribution": parse_source_distribution,
+    }
+
+
+def build_output_path(output: Optional[str], model: str, split: str, mode: str, max_samples: Optional[int]) -> Path:
+    if output:
+        return Path(output)
+    sample_suffix = f"smoke_{max_samples}" if max_samples else split
+    return PRED_DIR / f"{model}_{sample_suffix}_{mode}.json"
 
 
 def prepare_local_model(model_name: str, model_cache_dir: Path) -> Path:
@@ -106,6 +191,7 @@ def decode_generated_text(processor, output_ids: torch.Tensor, input_ids: Option
 class BLIP2Evaluator:
     def __init__(
         self,
+        prompt_template: str,
         model_name: str = "Salesforce/blip2-opt-2.7b",
         model_dir: Optional[Path] = None,
         device: Optional[str] = None,
@@ -113,6 +199,7 @@ class BLIP2Evaluator:
         from transformers import Blip2ForConditionalGeneration, Blip2Processor
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.prompt_template = prompt_template
         print(f"加载 BLIP-2: {model_name} (device: {self.device})")
         model_source = str(model_dir) if model_dir else model_name
 
@@ -125,8 +212,8 @@ class BLIP2Evaluator:
         self.model.eval()
 
     @torch.no_grad()
-    def predict_label(self, image: Image.Image, premise: str, hypothesis: str) -> tuple[str, str]:
-        prompt = PROMPT_TEMPLATE.format(premise=premise, hypothesis=hypothesis)
+    def predict_label(self, image: Image.Image, premise: str, hypothesis: str) -> tuple[dict, str]:
+        prompt = self.prompt_template.format(premise=premise, hypothesis=hypothesis)
         inputs = self.processor(images=image, text=prompt, return_tensors="pt").to(self.device)
 
         output_ids = self.model.generate(
@@ -142,6 +229,7 @@ class BLIP2Evaluator:
 class LLaVAEvaluator:
     def __init__(
         self,
+        prompt_template: str,
         model_name: str = "llava-hf/llava-1.5-7b-hf",
         model_dir: Optional[Path] = None,
         device: Optional[str] = None,
@@ -149,6 +237,7 @@ class LLaVAEvaluator:
         from transformers import AutoProcessor, LlavaForConditionalGeneration
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.prompt_template = prompt_template
         print(f"加载 LLaVA: {model_name} (device: {self.device})")
         model_source = str(model_dir) if model_dir else model_name
 
@@ -161,10 +250,10 @@ class LLaVAEvaluator:
         self.model.eval()
 
     @torch.no_grad()
-    def predict_label(self, image: Image.Image, premise: str, hypothesis: str) -> tuple[str, str]:
+    def predict_label(self, image: Image.Image, premise: str, hypothesis: str) -> tuple[dict, str]:
         prompt = (
             "USER: <image>\n"
-            f"{PROMPT_TEMPLATE.format(premise=premise, hypothesis=hypothesis)}\n"
+            f"{self.prompt_template.format(premise=premise, hypothesis=hypothesis)}\n"
             "ASSISTANT:"
         )
         inputs = self.processor(text=prompt, images=image, return_tensors="pt").to(self.device)
@@ -178,16 +267,16 @@ class LLaVAEvaluator:
         return parse_response(response), response
 
 
-def build_evaluator(model_type: str, model_cache_dir: Path):
+def build_evaluator(model_type: str, prompt_template: str, model_cache_dir: Path):
     """工厂函数，根据模型类型返回对应的 Evaluator。"""
     if model_type == "blip":
         model_name = "Salesforce/blip2-opt-2.7b"
         model_dir = prepare_local_model(model_name, model_cache_dir)
-        return BLIP2Evaluator(model_name=model_name, model_dir=model_dir)
+        return BLIP2Evaluator(prompt_template=prompt_template, model_name=model_name, model_dir=model_dir)
     if model_type == "llava":
         model_name = "llava-hf/llava-1.5-7b-hf"
         model_dir = prepare_local_model(model_name, model_cache_dir)
-        return LLaVAEvaluator(model_name=model_name, model_dir=model_dir)
+        return LLaVAEvaluator(prompt_template=prompt_template, model_name=model_name, model_dir=model_dir)
     raise ValueError(f"未知模型类型: {model_type}，支持: blip / llava")
 
 
@@ -195,7 +284,7 @@ def evaluate_dataset(evaluator, dataset: SNLIVEDataset) -> list[dict]:
     """批量评估数据集，返回预测结果列表。"""
     results = []
     for sample in tqdm(dataset, desc="LLM 推理"):
-        pred_label, raw_response = evaluator.predict_label(
+        parse_result, raw_response = evaluator.predict_label(
             sample["image"],
             sample["premise"],
             sample["hypothesis"],
@@ -205,8 +294,11 @@ def evaluate_dataset(evaluator, dataset: SNLIVEDataset) -> list[dict]:
             "premise": sample["premise"],
             "hypothesis": sample["hypothesis"],
             "gold_label": sample["label"],
-            "pred_label": pred_label,
+            "pred_label": parse_result["label"],
             "raw_response": raw_response,
+            "parse_source": parse_result["parse_source"],
+            "fallback_used": parse_result["fallback_used"],
+            "response_empty": parse_result["response_empty"],
         })
     return results
 
@@ -222,6 +314,7 @@ def main() -> None:
     parser.add_argument("--split", type=str, default="validation")
     parser.add_argument("--batch_size", type=int, default=8)
     parser.add_argument("--max_samples", type=int, default=None)
+    parser.add_argument("--mode", type=str, default="tuned", choices=["baseline", "tuned"])
     parser.add_argument("--model_cache_dir", type=str, default=str(PROJECT_ROOT / "data" / "hf-models"))
     parser.add_argument("--output", type=str, default=None)
     args = parser.parse_args()
@@ -229,20 +322,29 @@ def main() -> None:
     dataset = SNLIVEDataset(split=args.split, load_images=True, max_samples=args.max_samples)
     print(f"数据集大小: {len(dataset)}")
 
-    evaluator = build_evaluator(args.model, Path(args.model_cache_dir))
+    prompt_config = PROMPT_VARIANTS[args.mode]
+    evaluator = build_evaluator(args.model, prompt_config["template"], Path(args.model_cache_dir))
     results = evaluate_dataset(evaluator, dataset)
 
     accuracy = compute_accuracy(results)
+    prediction_distribution = compute_prediction_distribution(results)
+    parse_stats = compute_parse_stats(results)
     print(f"\n准确率: {accuracy:.2%}")
 
-    output_path = Path(args.output) if args.output else PRED_DIR / f"{args.model}_{args.split}.json"
+    output_path = build_output_path(args.output, args.model, args.split, args.mode, args.max_samples)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump({
             "method": args.model,
+            "model_name": args.model,
             "split": args.split,
+            "mode": args.mode,
+            "prompt_version": prompt_config["version"],
+            "max_samples": args.max_samples,
             "accuracy": accuracy,
+            "prediction_distribution": prediction_distribution,
+            "parse_stats": parse_stats,
             "results": results,
         }, f, ensure_ascii=False, indent=2)
 

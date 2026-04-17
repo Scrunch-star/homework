@@ -14,13 +14,26 @@ from src.utils.config import ANALYSIS_DIR, LABELS, PRED_DIR
 
 
 def load_results(pred_dir: Path) -> dict[str, dict]:
-    """加载所有预测结果文件，返回 {method: data} 字典。"""
+    """加载所有预测结果文件，返回 {唯一方法键: data} 字典。"""
     results = {}
     for json_path in sorted(pred_dir.glob("*.json")):
         with open(json_path, encoding="utf-8") as f:
             data = json.load(f)
+
         method = data.get("method", json_path.stem)
-        results[method] = data
+        mode = data.get("mode")
+        prompt_version = data.get("prompt_version")
+        max_samples = data.get("max_samples")
+
+        parts = [method]
+        if mode:
+            parts.append(mode)
+        if prompt_version:
+            parts.append(prompt_version)
+        if max_samples:
+            parts.append(f"n{max_samples}")
+        unique_key = "__".join(parts)
+        results[unique_key] = data
     return results
 
 
@@ -87,12 +100,14 @@ def main() -> None:
         print(f"未找到预测结果，请先运行各评估脚本。(目录: {pred_dir})")
         return
 
-    print("\n" + "=" * 100)
-    print(f"{'方法':<24} {'总准确率':>10} {'entail':>10} {'neutral':>10} {'contra':>10} {'预测分布':>30}")
-    print("=" * 100)
+    print("\n" + "=" * 150)
+    print(
+        f"{'方法':<42} {'模式':<10} {'样本数':>8} {'总准确率':>10} {'entail':>10} {'neutral':>10} {'contra':>10} {'预测分布':>30}"
+    )
+    print("=" * 150)
 
     summary = []
-    for method, data in all_results.items():
+    for method_key, data in all_results.items():
         records = data.get("results", [])
         if not records:
             continue
@@ -101,21 +116,32 @@ def main() -> None:
         matrix = compute_confusion_matrix(records)
         class_acc = per_class_accuracy(matrix)
         distribution = data.get("prediction_distribution", compute_prediction_distribution(records))
+        mode = data.get("mode", "legacy")
+        max_samples = data.get("max_samples") or len(records)
+        parse_stats = data.get("parse_stats")
 
         print(
-            f"{method:<24} {overall_acc:>10.2%} {class_acc[0]:>10.2%} {class_acc[1]:>10.2%} {class_acc[2]:>10.2%} "
+            f"{method_key:<42} {mode:<10} {max_samples:>8} {overall_acc:>10.2%} {class_acc[0]:>10.2%} {class_acc[1]:>10.2%} {class_acc[2]:>10.2%} "
             f"{str(distribution):>30}"
         )
+        if parse_stats:
+            print(f"{'':<42} {'parse':<10} {'':>8} {'':>10} {'':>10} {'':>10} {'':>10} {str(parse_stats):>30}")
+
         summary.append({
-            "method": method,
+            "method": data.get("method", method_key),
+            "method_key": method_key,
+            "mode": mode,
+            "prompt_version": data.get("prompt_version"),
+            "max_samples": data.get("max_samples"),
             "accuracy": overall_acc,
             "per_class": class_acc,
             "prediction_distribution": distribution,
+            "parse_stats": parse_stats,
         })
 
-        plot_confusion_matrix(matrix, method, output_dir)
+        plot_confusion_matrix(matrix, method_key.replace("__", "_"), output_dir)
 
-    print("=" * 100)
+    print("=" * 150)
 
     summary_path = output_dir / "summary.json"
     with open(summary_path, "w", encoding="utf-8") as f:

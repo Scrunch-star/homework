@@ -201,13 +201,20 @@
 2. ✅ 已完成所有方法评估
 3. ✅ 已完成结果对比与错误分析
 4. ✅ 已完成第一轮调优与诊断修复
-5. **下一步优先项：扩大 smoke 验证并决定是否全量重跑**
-   - 先对 tuned LLaVA / CoT 跑 50~100 条样本，确认 50% 提升不是偶然
-   - 若类别分布稳定，再跑完整 validation
-   - 继续观察 CoT 是否过度回退 neutral、LLaVA 是否仍偏 entailment
-6. **次优先项：继续调 CLIP**
-   - 基于现有阈值搜索结果，尝试更合理的 score 设计或模板集成
-   - 目标是改善 neutral / contradiction 失衡，而不只是提高总体准确率
+5. 🚧 **正在推进：扩大 smoke 验证前的脚本标准化**
+   - 已为 `src/methods/llm_eval.py` 增加 `baseline/tuned` 模式切换
+   - 已为 `src/methods/cot_eval.py` 增加 `baseline/tuned` 模式切换
+   - 已为 LLaVA / CoT 结果新增 `prediction_distribution`、`parse_stats`、`prompt_version`、`max_samples` 等元数据
+   - 已增强 `src/analysis/compare.py`，可兼容展示新旧结果结构
+   - 当前正在运行 5 条 schema smoke，验证新结果 JSON 结构是否稳定
+6. **下一步优先项：完成 schema smoke 后执行 50 条 baseline/tuned 对比**
+   - 先确认 `accuracy + prediction_distribution + parse_stats` 三类信息都能稳定落盘
+   - 再对 LLaVA / CoT 分别跑 50 条 baseline/tuned 对比
+   - 若接近门槛，再扩大到 100 条确认
+7. **次优先项：根据 smoke 结果决定是否继续小调优或转向 CLIP**
+   - 若 `accuracy >= 45%` 且分布健康、fallback 稳定，则考虑 full validation
+   - 若 `40%~45%` 且问题集中，允许一轮单变量小调优
+   - 若仍明显塌缩或 fallback 过多，则暂停继续打磨并转向 CLIP
 
 ---
 
@@ -215,3 +222,4 @@
 
 - 本次更新基于当前目录、数据文件、源码文件和输出目录的实际状态整理。
 - 代码实现完成 ≠ 实验结果完成；当前主要缺的是“实际跑通与记录指标”。
+- 当前已补齐“模式切换 + 元数据落盘 + 对比脚本兼容”这层基础设施，便于后续 smoke 验证形成可复盘结论。
