@@ -1,0 +1,79 @@
+{
+  "method": "llava",
+  "model_name": "llava",
+  "split": "validation",
+  "mode": "tuned",
+  "prompt_version": "tuned_v1",
+  "max_samples": 5,
+  "accuracy": 0.6,
+  "prediction_distribution": {
+    "entailment": 4,
+    "neutral": 0,
+    "contradiction": 1
+  },
+  "parse_stats": {
+    "fallback_count": 0,
+    "fallback_rate": 0.0,
+    "empty_response_count": 0,
+    "parse_source_distribution": {
+      "first_line_word": 5
+    }
+  },
+  "results": [
+    {
+      "image_id": "2248275918",
+      "premise": "A toddler poses in front of a computer at a business office.",
+      "hypothesis": "A toddler sleeps outside.",
+      "gold_label": "contradiction",
+      "pred_label": "contradiction",
+      "raw_response": "Contradiction",
+      "parse_source": "first_line_word",
+      "fallback_used": false,
+      "response_empty": false
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A toddler poses in front of a computer at a business office.",
+      "hypothesis": "A toddler poses at the office.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "raw_response": "entailment",
+      "parse_source": "first_line_word",
+      "fallback_used": false,
+      "response_empty": false
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "A toddler poses in front of a computer at a business office.",
+      "hypothesis": "A toddler poses in front of a computer indoors.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "raw_response": "entailment",
+      "parse_source": "first_line_word",
+      "fallback_used": false,
+      "response_empty": false
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "An infant is sitting in front of a computer.",
+      "hypothesis": "The baby is in front of the computer.",
+      "gold_label": "entailment",
+      "pred_label": "entailment",
+      "raw_response": "entailment",
+      "parse_source": "first_line_word",
+      "fallback_used": false,
+      "response_empty": false
+    },
+    {
+      "image_id": "2248275918",
+      "premise": "An infant is sitting in front of a computer.",
+      "hypothesis": "The baby loves the computer.",
+      "gold_label": "neutral",
+      "pred_label": "entailment",
+      "raw_response": "entailment",
+      "parse_source": "first_line_word",
+      "fallback_used": false,
+      "response_empty": false
+    }
+  ]
+}
